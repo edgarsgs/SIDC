@@ -10,6 +10,10 @@ Suite modular para processamento inteligente de dados com identificação autom�
 
 Este projeto agora funciona como um PWA instalável pelo navegador.
 
+**Link público:** https://github.com/edgarsgs/SIDC
+
+**Versão estável:** https://github.com/edgarsgs/SIDC/releases/tag/v1.0.0
+
 ### Como testar localmente
 - Execute um servidor local na pasta do projeto:
   ```powershell
@@ -18,9 +22,15 @@ Este projeto agora funciona como um PWA instalável pelo navegador.
 - Abra `http://localhost:8000`
 - O navegador deve detectar o app e oferecer a instalação.
 
+### Como instalar o PWA no navegador
+- No Chrome/Edge: clique no botão de instalação no endereço (ícone + ou “Instalar”) ou use o menu do navegador.
+- No Firefox: use o menu do navegador e selecione “Instalar” ou “Adicionar à área de trabalho”.
+- No mobile, o Chrome pode mostrar “Adicionar à tela inicial”.
+
 ### Como publicar
 - Use GitHub Pages ou qualquer servidor HTTPS seguro.
 - O manifesto e o service worker já estão configurados.
+- Se usar GitHub Pages, publique a pasta `main` ou `docs` como site e acesse o link do GitHub Pages.
 
 ---
 
