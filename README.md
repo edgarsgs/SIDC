@@ -1,4 +1,4 @@
-# Suite System Intelligence - Desenvolvimento de Canais
+﻿# Suite System Intelligence - Desenvolvimento de Canais
 
 ## 📋 Visão Geral
 
@@ -6,127 +6,25 @@ Suite modular para processamento inteligente de dados com identificação autom�
 
 ---
 
-## 🎯 Estrutura do Projeto
+## 🌐 Aplicação PWA
 
-```
-Suite System Intelligence/
-├── index.html              # Home principal (página de entrada)
-├── css/
-│   └── styles.css         # Estilos global (Light/Dark mode)
-├── js/
-│   ├── app.js            # Lógica principal da aplicação
-│   ├── modules/          # Módulos de processos específicos
-│   │   ├── processA.js   # Processo A - Análise de dados
-│   │   ├── processB.js   # Processo B - Relatórios e métricas
-│   │   ├── processC.js   # Processo C - Transformação de dados
-│   │   ├── processD.js   # Processo D - Validação
-│   │   ├── processE.js   # Processo E - Consolidação
-│   │   └── processF.js   # Processo F - Otimização
-│   └── utils/
-│       └── theme.js      # Gerenciamento de tema (light/dark)
-└── assets/               # Imagens, ícones, etc.
-```
-
----
-
-## 🎨 Design & UX
-
-### Características de Design:
-- **Estilo Apple/Google**: Interface clean, minimalista e moderna
-- **Modo Escuro/Claro**: Alternância automática com preferência de sistema
-- **Responsivo**: Funciona perfeitamente em desktop, tablet e mobile
-- **Smooth Transitions**: Animações suaves com performance otimizada
-- **Acessibilidade**: Segue padrões WCAG e boas práticas de UX
-
-### Componentes Principais:
-- **Header Sticky**: Menu de navegação sempre visível
-- **Hero Section**: Apresentação visual da suite
-- **Módulos Grid**: Cards interativos com hover effects
-- **Features Section**: Destaques da plataforma
-- **Modal Sistema**: Para exibição de processos
-
----
-
-## 🚀 Como Usar
-
-### 1. Abrir a Aplicação
-- Abra o arquivo `index.html` em um navegador moderno
-- Ou use um servidor local (recomendado):
-  ```bash
-  # Python 3
-  python -m http.server 8000
-  
-  # Python 2
-  python -m SimpleHTTPServer 8000
-  
-  # Node.js (com http-server)
-  http-server
-  ```
-
-### 2. Navegação
-- Clique nos links do menu (Home, Módulos, Sobre)
-- Alterne tema com o botão 🌙/☀️
-- Clique em um módulo para abrir seu processamento
-
-### 3. Adicionar Novo Processo
-1. Crie um novo arquivo em `js/modules/processX.js`
-2. Adicione um novo card na seção `modules-grid` em `index.html`
-3. Registre o módulo na lista `modules` do `app.js`
-
----
-
-## 📱 Suporte PWA
-
-Este projeto agora é um PWA instalável pelo navegador.
+Este projeto agora funciona como um PWA instalável pelo navegador.
 
 ### Como testar localmente
-- Rode o site em um servidor local, por exemplo:
+- Execute um servidor local na pasta do projeto:
   ```powershell
   python -m http.server 8000
   ```
 - Abra `http://localhost:8000`
-- O navegador deve detectar o PWA e oferecer instalação.
+- O navegador deve detectar o app e oferecer a instalação.
 
-### O que foi adicionado
-- `manifest.json` com nome, ícones e tema
-- `service-worker.js` para cache offline
-- `assets/icon.svg` como ícone do app
-- Link de manifesto no `index.html`
-- Registro do service worker no `index.html`
-
-### Observação
-- O PWA funciona melhor em `https` ou `localhost`
-- Para publicar, você pode usar GitHub Pages ou qualquer servidor web seguro
-
+### Como publicar
+- Use GitHub Pages ou qualquer servidor HTTPS seguro.
+- O manifesto e o service worker já estão configurados.
 
 ---
 
-## �️ Empacotamento com Electron
-
-Este projeto já está configurado para ser transformado em um app desktop usando Electron.
-
-### Como instalar dependências
-- Instale o Node.js (inclui npm)
-- No terminal, execute:
-  ```powershell
-  npm install
-  ```
-
-### Como rodar localmente como app desktop
-```powershell
-npm start
-```
-
-### Como gerar o instalador Windows
-```powershell
-npm run dist
-```
-
-> O instalador é configurado para criar atalho automaticamente no Desktop e no menu Iniciar.
-
----
-
-## �📦 Estrutura de um Módulo
+## 📦 Estrutura de um Módulo
 
 Cada módulo deve ter a seguinte estrutura:
 
@@ -262,3 +160,5 @@ Privado - Sistema interno
 ## 👤 Autor
 
 Desenvolvido para Suite System Intelligence - Desenvolvimento de Canais
+
+
