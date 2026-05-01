@@ -212,6 +212,70 @@ body {
     margin-bottom: var(--spacing-2xl);
 }
 
+.install-banner {
+    position: relative;
+    margin-bottom: var(--spacing-2xl);
+}
+
+.install-banner-card {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-md);
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-secondary);
+    box-shadow: var(--shadow-sm);
+}
+
+.install-banner-info {
+    max-width: 760px;
+}
+
+.install-banner-title {
+    margin: 0 0 var(--spacing-xs) 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.install-banner-text {
+    margin: 0;
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+}
+
+.install-banner-actions {
+    display: flex;
+    gap: var(--spacing-sm);
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.install-btn {
+    min-width: 140px;
+}
+
+.install-close {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 14px;
+    cursor: pointer;
+    transition: color var(--transition-fast);
+}
+
+.install-close:hover {
+    color: var(--text-primary);
+}
+
+.hidden {
+    display: none !important;
+}
+
 .hero-content {
     animation: fadeInUp 0.6s ease-out;
 }

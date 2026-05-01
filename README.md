@@ -75,7 +75,58 @@ Suite System Intelligence/
 
 ---
 
-## 📦 Estrutura de um Módulo
+## 📱 Suporte PWA
+
+Este projeto agora é um PWA instalável pelo navegador.
+
+### Como testar localmente
+- Rode o site em um servidor local, por exemplo:
+  ```powershell
+  python -m http.server 8000
+  ```
+- Abra `http://localhost:8000`
+- O navegador deve detectar o PWA e oferecer instalação.
+
+### O que foi adicionado
+- `manifest.json` com nome, ícones e tema
+- `service-worker.js` para cache offline
+- `assets/icon.svg` como ícone do app
+- Link de manifesto no `index.html`
+- Registro do service worker no `index.html`
+
+### Observação
+- O PWA funciona melhor em `https` ou `localhost`
+- Para publicar, você pode usar GitHub Pages ou qualquer servidor web seguro
+
+
+---
+
+## �️ Empacotamento com Electron
+
+Este projeto já está configurado para ser transformado em um app desktop usando Electron.
+
+### Como instalar dependências
+- Instale o Node.js (inclui npm)
+- No terminal, execute:
+  ```powershell
+  npm install
+  ```
+
+### Como rodar localmente como app desktop
+```powershell
+npm start
+```
+
+### Como gerar o instalador Windows
+```powershell
+npm run dist
+```
+
+> O instalador é configurado para criar atalho automaticamente no Desktop e no menu Iniciar.
+
+---
+
+## �📦 Estrutura de um Módulo
 
 Cada módulo deve ter a seguinte estrutura:
 

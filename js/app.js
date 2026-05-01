@@ -42,6 +42,7 @@ class SuiteApp {
         this.setupModal();
         this.setupNavigation();
         this.setupModuleCards();
+        this.setupPwaPrompt();
     }
 
     setupModal() {
@@ -110,6 +111,55 @@ class SuiteApp {
                     link.classList.add('active');
                 }
             });
+        });
+    }
+
+    setupPwaPrompt() {
+        this.deferredPrompt = null;
+        const installBanner = document.getElementById('installBanner');
+        const installBtn = document.getElementById('installPwaBtn');
+        const closeBtn = document.getElementById('installBannerClose');
+
+        window.addEventListener('beforeinstallprompt', (event) => {
+            event.preventDefault();
+            this.deferredPrompt = event;
+            if (installBanner) {
+                installBanner.classList.remove('hidden');
+            }
+        });
+
+        if (installBtn) {
+            installBtn.addEventListener('click', async () => {
+                if (!this.deferredPrompt) {
+                    return;
+                }
+                this.deferredPrompt.prompt();
+                const choiceResult = await this.deferredPrompt.userChoice;
+                if (choiceResult.outcome === 'accepted') {
+                    console.log('Usuário aceitou a instalação do PWA.');
+                } else {
+                    console.log('Usuário recusou a instalação do PWA.');
+                }
+                this.deferredPrompt = null;
+                if (installBanner) {
+                    installBanner.classList.add('hidden');
+                }
+            });
+        }
+
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => {
+                if (installBanner) {
+                    installBanner.classList.add('hidden');
+                }
+            });
+        }
+
+        window.addEventListener('appinstalled', () => {
+            if (installBanner) {
+                installBanner.classList.add('hidden');
+            }
+            console.log('PWA instalado com sucesso.');
         });
     }
 
@@ -192,6 +242,7 @@ class SuiteApp {
                     </div>
 
                     <button 
+                        id="processModuleBtn"
                         style="
                             width: 100%; 
                             margin-top: 24px; 
@@ -204,12 +255,18 @@ class SuiteApp {
                             cursor: pointer;
                             font-size: 14px;
                         "
-                        onclick="alert('Módulo ' + '${module.name}' + ' será implementado em breve com seu arquivo JS específico')"
                     >
                         Processar Arquivo
                     </button>
                 </div>
             `;
+
+            const processBtn = this.modal.body.querySelector('#processModuleBtn');
+            if (processBtn) {
+                processBtn.addEventListener('click', () => {
+                    alert(`Módulo ${module.name} será implementado em breve com seu arquivo JS específico`);
+                });
+            }
         }, 500);
     }
 
