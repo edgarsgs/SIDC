@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suite System Intelligence - Desenvolvimento de Canais</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header class="header">
+        <div class="header-container">
+            <div class="logo">
+                <span class="logo-icon">⚙️</span>
+                <span class="logo-text">System Intelligence</span>
+            </div>
+            
+            <nav class="nav">
+                <a href="#home" class="nav-link active">Home</a>
+                <a href="#modules" class="nav-link">Módulos</a>
+                <a href="#about" class="nav-link">Sobre</a>
+            </nav>
+
+            <div class="header-actions">
+                <button class="theme-toggle" id="themeToggle" title="Alternar tema">
+                    <span class="theme-icon">🌙</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Hero Section -->
+        <section class="hero" id="home">
+            <div class="hero-content">
+                <h1 class="hero-title">Suite System Intelligence</h1>
+                <p class="hero-subtitle">Desenvolvimento de Canais - Processamento Inteligente de Dados</p>
+                <p class="hero-description">
+                    Plataforma modular para processamento e análise automática de planilhas com identificação inteligente de processos
+                </p>
+            </div>
+        </section>
+
+        <!-- Modules Grid Section -->
+        <section class="modules-section" id="modules">
+            <h2 class="section-title">Módulos Disponíveis</h2>
+            <p class="section-subtitle">Clique em um módulo para iniciar o processamento</p>
+            
+            <div class="modules-grid">
+                <!-- Module Card 1 -->
+                <div class="module-card" data-module="process-a">
+                    <div class="module-icon">📊</div>
+                    <h3 class="module-title">Processo A</h3>
+                    <p class="module-description">Análise de dados estruturados</p>
+                    <div class="module-meta">
+                        <span class="module-format">Excel/CSV</span>
+                    </div>
+                    <button class="module-btn">Executar</button>
+                </div>
+
+                <!-- Module Card 2 -->
+                <div class="module-card" data-module="process-b">
+                    <div class="module-icon">📈</div>
+                    <h3 class="module-title">Processo B</h3>
+                    <p class="module-description">Geração de relatórios e métricas</p>
+                    <div class="module-meta">
+                        <span class="module-format">PDF/HTML</span>
+                    </div>
+                    <button class="module-btn">Executar</button>
+                </div>
+
+                <!-- Module Card 3 -->
+                <div class="module-card" data-module="process-c">
+                    <div class="module-icon">🔄</div>
+                    <h3 class="module-title">Processo C</h3>
+                    <p class="module-description">Transformação e sincronização de dados</p>
+                    <div class="module-meta">
+                        <span class="module-format">JSON/Database</span>
+                    </div>
+                    <button class="module-btn">Executar</button>
+                </div>
+
+                <!-- Module Card 4 -->
+                <div class="module-card" data-module="process-d">
+                    <div class="module-icon">✅</div>
+                    <h3 class="module-title">Processo D</h3>
+                    <p class="module-description">Validação e verificação de integridade</p>
+                    <div class="module-meta">
+                        <span class="module-format">Excel/CSV</span>
+                    </div>
+                    <button class="module-btn">Executar</button>
+                </div>
+
+                <!-- Module Card 5 -->
+                <div class="module-card" data-module="process-e">
+                    <div class="module-icon">📑</div>
+                    <h3 class="module-title">Processo E</h3>
+                    <p class="module-description">Consolidação e agrupamento de informações</p>
+                    <div class="module-meta">
+                        <span class="module-format">Excel</span>
+                    </div>
+                    <button class="module-btn">Executar</button>
+                </div>
+
+                <!-- Module Card 6 -->
+                <div class="module-card" data-module="process-f">
+                    <div class="module-icon">🎯</div>
+                    <h3 class="module-title">Processo F</h3>
+                    <p class="module-description">Otimização e automação de workflows</p>
+                    <div class="module-meta">
+                        <span class="module-format">Custom</span>
+                    </div>
+                    <button class="module-btn">Executar</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features-section">
+            <h2 class="section-title">Características</h2>
+            
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">🧠</div>
+                    <h3>Inteligência Automática</h3>
+                    <p>Identifica automaticamente o tipo de processo baseado na estrutura da planilha</p>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">🔌</div>
+                    <h3>Modular</h3>
+                    <p>Cada processo é independente e pode ser executado isoladamente</p>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Performático</h3>
+                    <p>Otimizado para processar grandes volumes de dados com velocidade</p>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">🎨</div>
+                    <h3>Interface Intuitiva</h3>
+                    <p>Design limpo e responsivo para melhor experiência do usuário</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal para exibição de processos (futuro) -->
+    <div class="modal" id="processModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Processo</h2>
+                <button class="modal-close" id="modalClose">✕</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <p>Aqui será exibido o conteúdo do processo...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2026 Suite System Intelligence. Desenvolvimento de Canais.</p>
+    </footer>
+
+    <script src="js/utils/theme.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
