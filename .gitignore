@@ -1,35 +1,6 @@
-# Dependencies
-node_modules/
-npm-debug.log
-yarn-error.log
+# Arquivos Sensíveis (Privados)
+DOCUMENTACAO_ESTRATEGICA.md
 
-# IDE
+# Arquivos de Sistema e IDE
 .vscode/
-.idea/
-*.swp
-*.swo
-*~
 .DS_Store
-
-# Build outputs
-dist/
-build/
-out/
-
-# Environment
-.env
-.env.local
-.env.*.local
-
-# OS
-Thumbs.db
-.DS_Store
-
-# Temporary files
-*.tmp
-*.temp
-.cache/
-
-# Logs
-logs/
-*.log
