@@ -1,7 +1,7 @@
 ﻿﻿# Suite System Intelligence - Desenvolvimento de Canais
 
 ## 📋 Visão Geral
-**Versão 1.0.0 (Consolidação de Interface e UX)**  
+**Versão SIDC_v1.0.0 (Consolidação de Interface e UX)**  
 A Suite SIDC é um ecossistema modular de alta performance para processamento e análise de dados, projetada com foco em UX Premium (Apple Design) e automação assistida para o time de Desenvolvimento de Canais.
 
 ---
@@ -12,7 +12,7 @@ Este projeto agora funciona como um PWA instalável pelo navegador.
 
 **Link público:** https://github.com/edgarsgs/SIDC
 
-**Versão estável:** https://github.com/edgarsgs/SIDC/releases/tag/v1.0.0
+**Versão estável:** https://github.com/edgarsgs/SIDC/releases/tag/SIDC_v1.0.0
 
 Leia também: [Guia de instalação do PWA](INSTALL_GUIDE.md)
 

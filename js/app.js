@@ -528,7 +528,7 @@ class SuiteApp {
                 </div>
 
                 <div style="margin-top: var(--spacing-2xl); padding-top: var(--spacing-lg); border-top: 1px solid var(--border-color); text-align: center; opacity: 0.6; font-size: 12px;">
-                    Versão 1.0.0 • 2026 • Suite SIDC • Todos os direitos reservados
+                    Versão SIDC_v1.0.0 • 2026 • Suite SIDC • Todos os direitos reservados
                 </div>
             </div>
         `;
