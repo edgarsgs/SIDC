@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0071e3">
+    <title>Suite System Intelligence - SIDC v1.0.0</title>
+    <style>
+        /* ==================== ROOT & VARIABLES ==================== */
+        :root {
+            /* Light Mode Colors */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f5f5f7;
+            --bg-tertiary: #ebebf0;
+            
+            --text-primary: #1d1d1f;
+            --text-secondary: #86868b;
+            --text-tertiary: #a1a1a6;
+            
+            --border-color: #e5e5e7;
+            --border-light: #f0f0f0;
+            
+            --accent-color: #0071e3;
+            --accent-hover: #0077ed;
+            --accent-light: #f0f8ff;
+            
+            --success-color: #34c759;
+            --warning-color: #ff9500;
+            --error-color: #ff3b30;
+            
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+            
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 20px;
+            
+            --spacing-xs: 4px;
+            --spacing-sm: 8px;
+            --spacing-md: 16px;
+            --spacing-lg: 24px;
+            --spacing-xl: 32px;
+            --spacing-2xl: 48px;
+            
+            --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Dark Mode */
+        [data-theme="dark"] {
+            --bg-primary: #1d1d1f;
+            --bg-secondary: #262627;
+            --bg-tertiary: #424245;
+            
+            --text-primary: #f5f5f7;
+            --text-secondary: #a1a1a6;
+            --text-tertiary: #86868b;
+            
+            --border-color: #424245;
+            --border-light: #2a2a2d;
+            
+            --accent-color: #0a84ff;
+            --accent-hover: #147efb;
+            --accent-light: #1a3a52;
+        }
+
+        /* ==================== GLOBAL STYLES ==================== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: background-color var(--transition-normal), color var(--transition-normal);
+        }
+
+        /* ==================== HEADER ==================== */
+        .header {
+            position: sticky; top: 0; z-index: 1000;
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+        }
+        [data-theme="dark"] .header { background-color: rgba(29, 29, 31, 0.8); }
+        .header-container {
+            max-width: 1400px; margin: 0 auto;
+            padding: var(--spacing-md) var(--spacing-lg);
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .logo { display: flex; align-items: center; gap: var(--spacing-sm); font-weight: 600; font-size: 16px; }
+        .logo-text {
+            background: linear-gradient(135deg, var(--accent-color), var(--accent-hover));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .nav { display: flex; gap: var(--spacing-lg); }
+        .nav-link {
+            color: var(--text-secondary); text-decoration: none; font-size: 14px; font-weight: 500;
+            padding: var(--spacing-sm) var(--spacing-md); transition: all var(--transition-fast);
+        }
+        .nav-link:hover, .nav-link.active { color: var(--accent-color); }
+
+        /* ==================== COMPONENTS ==================== */
+        .container { max-width: 1400px; margin: 0 auto; padding: var(--spacing-2xl) var(--spacing-lg); }
+        
+        .hero { text-align: center; padding: var(--spacing-2xl) 0; }
+        .hero.splash-screen { min-height: 80vh; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .hero-title { font-size: clamp(32px, 6vw, 56px); font-weight: 700; margin-bottom: var(--spacing-md); color: var(--accent-color); }
+        .hero-btn {
+            margin-top: var(--spacing-2xl); padding: 16px 48px;
+            background-color: var(--accent-color); color: white; border: none;
+            border-radius: 980px; font-size: 18px; cursor: pointer;
+            transition: all 0.3s ease; box-shadow: 0 10px 30px rgba(0, 113, 227, 0.3);
+        }
+        .hero-btn:hover { transform: scale(1.05) translateY(-2px); }
+
+        .search-container { max-width: 700px; margin: 0 auto var(--spacing-xl) auto; position: relative; }
+        .search-input {
+            width: 100%; padding: 18px 24px 18px 58px; border-radius: 100px;
+            border: 1px solid rgba(0, 0, 0, 0.08); background-color: rgba(245, 245, 247, 0.4);
+            backdrop-filter: blur(25px) saturate(190%); color: var(--text-primary); font-size: 18px;
+            outline: none; transition: all 0.4s ease;
+        }
+        .search-input:focus { background-color: var(--bg-primary); border-color: var(--accent-color); box-shadow: 0 15px 45px rgba(0,0,0,0.1); }
+        .search-icon { position: absolute; left: 24px; top: 50%; transform: translateY(-50%); font-size: 22px; opacity: 0.4; }
+
+        .modules-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--spacing-lg); }
+        .module-card {
+            background-color: var(--bg-secondary); border-radius: var(--radius-lg); padding: var(--spacing-lg);
+            transition: all var(--transition-normal); cursor: pointer; position: relative;
+            display: flex; flex-direction: column; gap: var(--spacing-md); border: 1px solid var(--border-color);
+        }
+        .module-card:hover { transform: translateY(-4px); border-color: var(--accent-color); background-color: var(--bg-primary); }
+        .favorite-btn { position: absolute; top: 12px; right: 12px; border: none; background: none; font-size: 20px; cursor: pointer; }
+        .favorite-btn.is-favorite { color: #ffcc00; }
+
+        .modal {
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5); z-index: 2000; align-items: center; justify-content: center;
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background-color: var(--bg-primary); border-radius: var(--radius-lg);
+            max-width: 1200px; width: 85%; height: 80vh; display: flex; flex-direction: column;
+        }
+        .modal-header { padding: var(--spacing-lg); border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; }
+        .modal-body { padding: var(--spacing-lg); flex: 1; overflow-y: auto; }
+
+        .drop-zone {
+            border: 2px dashed var(--border-color); border-radius: var(--radius-lg);
+            padding: var(--spacing-2xl); text-align: center; background: var(--bg-secondary);
+            transition: all 0.3s ease; cursor: pointer;
+        }
+        .drop-zone.drag-over { border-color: var(--accent-color); background: var(--accent-light); }
+
+        .toast-container {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px);
+            background: var(--text-primary); color: var(--bg-primary); padding: 12px 24px;
+            border-radius: 100px; z-index: 3000; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .toast-container.show { transform: translateX(-50%) translateY(0); }
+        .hidden-initially { display: none !important; }
+        .theme-toggle { cursor: pointer; background: var(--bg-secondary); border: none; padding: 8px; border-radius: 8px; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-container">
+            <div class="logo">
+                <span>⚙️</span>
+                <span class="logo-text">System Intelligence</span>
+            </div>
+            <nav class="nav" id="mainNav" style="visibility: hidden; opacity: 0;">
+                <a href="#modules" class="nav-link active">Módulos</a>
+                <a href="#about" class="nav-link">Sobre</a>
+                <a href="#feedback" class="nav-link">Sugestões</a>
+            </nav>
+            <button class="theme-toggle" id="themeToggle"><span class="theme-icon">🌙</span></button>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="hero splash-screen" id="home">
+            <h1 class="hero-title">Suite System Intelligence</h1>
+            <p>Desenvolvimento de Canais - Processamento Inteligente</p>
+            <button id="startBtn" class="hero-btn">Iniciar</button>
+        </section>
+
+        <div id="appContent" class="hidden-initially">
+            <section id="modules">
+                <div id="favoritesSection" style="display:none; margin-bottom: 40px;">
+                    <h2>Favoritos</h2>
+                    <div class="modules-grid" id="favoritesGrid"></div>
+                </div>
+
+                <div class="search-container">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="moduleSearch" class="search-input" placeholder="Buscar módulo...">
+                </div>
+
+                <div class="modules-grid" id="mainModulesGrid">
+                    <!-- Cards serão gerados ou mantidos aqui -->
+                    <div class="module-card" data-module="process-a">
+                        <button class="favorite-btn">⭐</button>
+                        <div style="font-size:32px">📊</div>
+                        <h3>Processo A</h3>
+                        <p>Análise de dados estruturados</p>
+                        <button class="hero-btn" style="padding:10px; font-size:14px; margin-top:auto">Executar</button>
+                    </div>
+                    <div class="module-card" data-module="process-b">
+                        <button class="favorite-btn">⭐</button>
+                        <div style="font-size:32px">📈</div>
+                        <h3>Processo B</h3>
+                        <p>Relatórios e métricas</p>
+                        <button class="hero-btn" style="padding:10px; font-size:14px; margin-top:auto">Executar</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <div class="modal" id="processModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Processo</h2>
+                <button id="modalClose" style="background:none; border:none; font-size:24px; cursor:pointer; color: var(--text-secondary);">✕</button>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+        </div>
+    </div>
+
+    <div id="toastNotification" class="toast-container"></div>
+
+    <script>
+        // ==================== THEME MANAGER ====================
+        class ThemeManager {
+            constructor() {
+                this.theme = localStorage.getItem('suite-theme-preference') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+                this.init();
+            }
+            init() {
+                this.apply();
+                document.getElementById('themeToggle').addEventListener('click', () => this.toggle());
+            }
+            apply() {
+                document.documentElement.setAttribute('data-theme', this.theme);
+                document.querySelector('.theme-icon').textContent = this.theme === 'light' ? '🌙' : '☀️';
+                localStorage.setItem('suite-theme-preference', this.theme);
+            }
+            toggle() { this.theme = this.theme === 'light' ? 'dark' : 'light'; this.apply(); }
+        }
+
+        // ==================== CORE APP ====================
+        class SuiteApp {
+            constructor() {
+                this.favorites = JSON.parse(localStorage.getItem('sidc_favorites')) || [];
+                this.isDebug = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+                this.modules = {
+                    'process-a': { name: 'Processo A', description: 'Análise de dados estruturados', icon: '📊' },
+                    'process-b': { name: 'Processo B', description: 'Geração de relatórios e métricas', icon: '📈' },
+                    'process-c': { name: 'Processo C', description: 'Transformação e sincronização de dados', icon: '🔄' },
+                    'process-d': { name: 'Processo D', description: 'Validação e verificação de integridade', icon: '✅' },
+                    'process-e': { name: 'Processo E', description: 'Consolidação e agrupamento de informações', icon: '📑' },
+                    'process-f': { name: 'Processo F', description: 'Otimização e automação de workflows', icon: '🎯' }
+                };
+                this.init();
+            }
+
+            init() {
+                new ThemeManager();
+                this.setupStartButton();
+                this.setupSearch();
+                this.renderGrid();
+                this.renderFavorites();
+                this.setupModalControls();
+                this.setupNavLinks();
+            }
+
+            renderGrid() {
+                const grid = document.getElementById('mainModulesGrid');
+                grid.innerHTML = Object.entries(this.modules).map(([id, mod]) => `
+                    <div class="module-card" data-module="${id}">
+                        <button class="favorite-btn ${this.favorites.includes(id) ? 'is-favorite' : ''}">⭐</button>
+                        <div style="font-size:32px; text-align:center">${mod.icon}</div>
+                        <h3 style="font-size:18px; font-weight:600">${mod.name}</h3>
+                        <p style="font-size:14px; color:var(--text-secondary); flex-grow:1">${mod.description}</p>
+                        <button class="hero-btn" style="padding:10px; font-size:14px; margin-top:auto; width:100%">Executar</button>
+                    </div>
+                `).join('');
+                this.setupModuleCards();
+            }
+
+            setupNavLinks() {
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        const target = link.getAttribute('href').substring(1);
+                        if (target === 'about') this.openAboutModal();
+                        if (target === 'feedback') this.openFeedbackModal();
+                    });
+                });
+            }
+
+            setupStartButton() {
+                document.getElementById('startBtn').addEventListener('click', () => {
+                    const hero = document.getElementById('home');
+                    hero.style.opacity = '0';
+                    hero.style.transform = 'translateY(-20px)';
+                    setTimeout(() => hero.style.display = 'none', 500);
+
+                    document.getElementById('appContent').classList.remove('hidden-initially');
+                    const nav = document.getElementById('mainNav');
+                    nav.style.visibility = 'visible'; nav.style.opacity = '1';
+                });
+            }
+
+            setupSearch() {
+                document.getElementById('moduleSearch').addEventListener('input', (e) => {
+                    const term = e.target.value.toLowerCase();
+                    document.querySelectorAll('#mainModulesGrid .module-card').forEach(card => {
+                        const text = card.innerText.toLowerCase();
+                        card.style.display = text.includes(term) ? 'flex' : 'none';
+                    });
+                });
+            }
+
+            setupModuleCards() {
+                document.querySelectorAll('.module-card').forEach(card => {
+                    const id = card.dataset.module;
+                    card.querySelector('.favorite-btn').addEventListener('click', (e) => {
+                        e.stopPropagation(); this.toggleFavorite(id);
+                    });
+                    card.addEventListener('click', (e) => {
+                        if (!e.target.closest('.favorite-btn')) this.openModule(id);
+                    });
+                });
+            }
+
+            toggleFavorite(id) {
+                const idx = this.favorites.indexOf(id);
+                if (idx === -1) {
+                    if (this.favorites.length >= 4) return this.showToast('Limite de 4 favoritos atingido');
+                    this.favorites.push(id);
+                } else {
+                    this.favorites.splice(idx, 1);
+                }
+                localStorage.setItem('sidc_favorites', JSON.stringify(this.favorites));
+                this.renderGrid();
+                this.renderFavorites();
+            }
+
+            renderFavorites() {
+                const section = document.getElementById('favoritesSection');
+                const grid = document.getElementById('favoritesGrid');
+                grid.innerHTML = '';
+                if (this.favorites.length === 0) {
+                    section.style.display = 'none';
+                    return;
+                }
+                section.style.display = 'block';
+                this.favorites.forEach(id => {
+                    const original = document.querySelector(`#mainModulesGrid [data-module="${id}"]`);
+                    if (original) {
+                        const clone = original.cloneNode(true);
+                        clone.querySelector('.favorite-btn').addEventListener('click', (e) => {
+                            e.stopPropagation(); this.toggleFavorite(id);
+                        });
+                        clone.addEventListener('click', (e) => {
+                            if (!e.target.closest('.favorite-btn')) this.openModule(id);
+                        });
+                        grid.appendChild(clone);
+                    }
+                });
+            }
+
+            setupModalControls() {
+                document.getElementById('modalClose').addEventListener('click', () => this.closeModal());
+                document.getElementById('processModal').addEventListener('click', (e) => {
+                    if (e.target.id === 'processModal') this.closeModal();
+                });
+            }
+
+            openModule(id) {
+                const mod = this.modules[id];
+                document.getElementById('modalTitle').textContent = mod.name;
+                document.getElementById('modalBody').innerHTML = `
+                    <div class="upload-container">
+                        <div>
+                            <h3 style="margin-bottom: 8px;">${mod.name}</h3>
+                            <p style="opacity: 0.7; font-size: 14px;">${mod.description}</p>
+                        </div>
+                        <div class="drop-zone" id="dropZone">
+                            <div class="drop-zone-icon">📁</div>
+                            <p class="drop-zone-text">Arraste seu arquivo para aqui ou clique para selecionar</p>
+                            <p style="font-size: 13px; opacity: 0.6;">Formatos aceitos: Excel (.xlsx, .xls), CSV ou JSON</p>
+                            <input type="file" id="fileUpload" style="display:none" accept=".xlsx,.xls,.csv,.json">
+                        </div>
+                        <div id="fileInfo" style="display: none; padding: 12px; background: var(--accent-light); border-radius: 8px; border-left: 4px solid var(--accent-color);">
+                            <p id="fileName" style="font-size: 14px; font-weight: 600;"></p>
+                        </div>
+                        <button class="hero-btn" id="procBtn" disabled style="width:100%; opacity:0.5">Processar Arquivo</button>
+                    </div>
+                `;
+                this.setupDragAndDrop(mod);
+                document.getElementById('processModal').classList.add('active');
+            }
+
+            setupDragAndDrop(mod) {
+                const zone = document.getElementById('dropZone'), input = document.getElementById('fileUpload');
+                const btn = document.getElementById('procBtn'), info = document.getElementById('fileInfo'), name = document.getElementById('fileName');
+                
+                const handle = (files) => {
+                    if (files.length > 0) {
+                        name.textContent = `Arquivo: ${files[0].name}`;
+                        info.style.display = 'block';
+                        btn.disabled = false; btn.style.opacity = '1';
+                        zone.querySelector('.drop-zone-icon').textContent = '📄';
+                    }
+                };
+
+                zone.onclick = () => input.click();
+                input.onchange = (e) => handle(e.target.files);
+                zone.ondragover = (e) => { e.preventDefault(); zone.classList.add('drag-over'); };
+                zone.ondragleave = () => zone.classList.remove('drag-over');
+                zone.ondrop = (e) => { e.preventDefault(); zone.classList.remove('drag-over'); handle(e.dataTransfer.files); };
+                btn.onclick = () => this.showToast(this.isDebug ? `Debug: Processando ${mod.name}...` : `Iniciando processamento de ${mod.name}`);
+            }
+
+            openAboutModal() {
+                document.getElementById('modalTitle').textContent = 'Sobre a Plataforma';
+                document.getElementById('modalBody').innerHTML = `
+                    <div style="text-align: center; padding: 20px;">
+                        <div style="font-size: 48px; margin-bottom: 16px;">⚙️</div>
+                        <h3 style="font-size: 24px; margin-bottom: 8px;">Copiloto System Intelligence</h3>
+                        <p style="color: var(--text-secondary); margin-bottom: 24px;">Tecnologia a serviço da inteligência humana</p>
+                        <p style="text-align: justify; margin-bottom: 16px;">Desenvolvida por <strong>Nathalia Pereira dos Santos</strong> para elevar o potencial analítico do time de Desenvolvimento de Canais.</p>
+                        <div style="padding: 16px; background: var(--bg-secondary); border-radius: 12px; border-left: 4px solid var(--accent-color); text-align: left;">
+                            <p style="font-size: 14px;">Missão: Absorver tarefas mecânicas e devolver tempo para estratégia.</p>
+                        </div>
+                        <p style="margin-top: 32px; opacity: 0.5; font-size: 12px;">Versão SIDC_v1.0.0 • 2026</p>
+                    </div>
+                `;
+                document.getElementById('processModal').classList.add('active');
+            }
+
+            openFeedbackModal() {
+                document.getElementById('modalTitle').textContent = 'Canal de Melhoria';
+                document.getElementById('modalBody').innerHTML = `
+                    <div style="padding: 10px;">
+                        <h3 style="margin-bottom: 16px;">Contribua com a Evolução</h3>
+                        <textarea id="feedText" style="width:100%; height:150px; padding:12px; border-radius:8px; border:1px solid var(--border-color); background: var(--bg-primary); color: var(--text-primary); margin-bottom: 16px;" placeholder="Como podemos melhorar seu dia a dia?"></textarea>
+                        <button class="hero-btn" id="sendFeed" style="margin-top:0; padding:12px 24px; font-size:14px; width:100%">Enviar Sugestão</button>
+                    </div>
+                `;
+                document.getElementById('sendFeed').onclick = () => {
+                    this.showToast('Obrigado! Sua sugestão foi enviada.');
+                    this.closeModal();
+                };
+                document.getElementById('processModal').classList.add('active');
+            }
+
+            closeModal() { document.getElementById('processModal').classList.remove('active'); }
+            
+            showToast(msg) {
+                const t = document.getElementById('toastNotification');
+                t.textContent = msg; t.classList.add('show');
+                setTimeout(() => t.classList.remove('show'), 3000);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => window.app = new SuiteApp());
+    </script>
+</body>
+</html>

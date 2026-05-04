@@ -152,7 +152,14 @@ A aplicação se adapta automaticamente para:
 
 ---
 
-## 📝 Notas para Desenvolvimento
+## �🛠️ Desenvolvimento em Ambientes Restritos
+
+Se o ambiente de destino possuir restrições de instalação (sem IDE):
+1. **Editor:** Utilize o `GitHub Codespaces` (pressione `.` no repositório) para editar via browser.
+2. **Teste:** Utilize o Python Portátil para rodar o servidor local (conforme `INSTALL_GUIDE.md`).
+3. **Logs:** Utilize o `F12` (Console do Navegador) para depuração. A aplicação detecta automaticamente o ambiente `localhost` e ativa o modo Debug.
+
+##  Notas para Desenvolvimento
 
 ### Convenções de Código:
 - Use `camelCase` para variáveis e funções

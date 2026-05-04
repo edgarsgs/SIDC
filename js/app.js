@@ -44,6 +44,7 @@ class SuiteApp {
             this.favorites = [];
         }
         this.toastTimeout = null;
+        this.isDebug = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
         this.init();
     }
 
@@ -442,7 +443,12 @@ class SuiteApp {
             const processBtn = this.modal.body.querySelector('#processModuleBtn');
             if (processBtn) {
                 processBtn.addEventListener('click', () => {
-                    alert(`Módulo ${module.name} será implementado em breve com seu arquivo JS específico`);
+                    if (this.isDebug) {
+                        this.showToast(`Modo Debug: Processando dados fictícios para ${module.name}...`);
+                        console.log('Dados do arquivo capturados:', document.getElementById('fileName').textContent);
+                    } else {
+                        alert(`Módulo ${module.name} será implementado em breve com seu arquivo JS específico`);
+                    }
                 });
             }
         }, 500);
