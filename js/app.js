@@ -442,8 +442,13 @@ class SuiteApp {
 
                     <div id="processResult" style="display: none; margin-top: 16px; padding: 12px; border-radius: 8px; background: #e8f5e9; border: 1px solid #c8e6c9;">
                         <p style="font-size: 14px; color: #2e7d32; font-weight: 600;">✅ Resultado:</p>
-                        <p id="resultMessage" style="font-size: 13px;"></p>
-                        <button id="downloadReportBtn" class="module-btn" style="margin-top: 15px; background: #2e7d32; padding: 8px;">Baixar Relatório Mastigado</button>
+                        <p id="resultMessage" style="font-size: 13px; margin-bottom: 12px;"></p>
+                        
+                        <div id="dashboardContainer" style="margin-top: 12px; background: white; border-radius: 6px; border: 1px solid #c8e6c9; overflow: hidden;">
+                            <!-- Tabela de Indicadores será inserida aqui -->
+                        </div>
+
+                        <button id="downloadReportBtn" class="module-btn" style="margin-top: 15px; width: 100%; background: #2e7d32; padding: 10px; font-weight: 600;">💾 Baixar Relatório Mastigado</button>
                     </div>
 
                     <div id="alertPanel" style="display: none; margin-top: 12px; padding: 12px; border-radius: 8px; background: #fff3e0; border: 1px solid #ffe0b2;">
@@ -520,6 +525,7 @@ class SuiteApp {
                             document.getElementById('loadingIndicator').style.display = 'none';
                             document.getElementById('processResult').style.display = 'block';
                             document.getElementById('resultMessage').textContent = result.message;
+                            this.renderDashboard(result.summary);
                             
                             // Exibir alertas de 3k se houver
                             if (result.alerts && result.alerts.length > 0) {
@@ -549,6 +555,40 @@ class SuiteApp {
                 });
             }
         }, 500);
+    }
+
+    renderDashboard(summary) {
+        const container = document.getElementById('dashboardContainer');
+        if (!container || !summary) return;
+
+        let html = `
+            <table style="width: 100%; border-collapse: collapse; font-size: 11px; text-align: left;">
+                <thead>
+                    <tr style="background: #f1f8e9; border-bottom: 1px solid #c8e6c9;">
+                        <th style="padding: 8px;">FP98</th>
+                        <th style="padding: 8px;">Grupo Cliente</th>
+                        <th style="padding: 8px; text-align: center;">Qtd.</th>
+                        <th style="padding: 8px; text-align: right;">Total Vl.</th>
+                    </tr>
+                </thead>
+                <tbody>
+        `;
+
+        Object.keys(summary).sort().forEach(key => {
+            const data = summary[key];
+            const [fp, group] = key.split(' | ');
+            html += `
+                <tr style="border-bottom: 1px solid #eee;">
+                    <td style="padding: 6px 8px; font-weight: 600;">${fp}</td>
+                    <td style="padding: 6px 8px;">${group}</td>
+                    <td style="padding: 6px 8px; text-align: center;">${data.qtd}</td>
+                    <td style="padding: 6px 8px; text-align: right; font-family: monospace;">${data.soma.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
+                </tr>
+            `;
+        });
+
+        html += '</tbody></table>';
+        container.innerHTML = html;
     }
 
     setupDragAndDrop() {
@@ -627,7 +667,7 @@ class SuiteApp {
                 </div>
 
                 <div style="margin-top: var(--spacing-2xl); padding-top: var(--spacing-lg); border-top: 1px solid var(--border-color); text-align: center; opacity: 0.6; font-size: 12px;">
-                    Versão SIDC_v1.1.4-beta • 2026 • Suite SIDC • Todos os direitos reservados
+                    Versão SIDC_v1.1.5-beta • 2026 • Suite SIDC • Todos os direitos reservados
                 </div>
             </div>
         `;
