@@ -1,11 +1,11 @@
 /**
  * Módulo Processo A: Análise de dados estruturados
- * Versão: 1.0.0
+ * Versão: 1.1.0-beta
  */
 class ProcessA {
     constructor() {
         this.name = 'Processo A';
-        this.version = '1.0.0';
+        this.version = '1.1.0-beta';
         this.description = 'Análise de dados estruturados';
     }
 

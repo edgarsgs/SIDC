@@ -440,6 +440,7 @@ class SuiteApp {
                     <div id="loadingIndicator" style="display: none; text-align: center; margin-top: 16px;">
                         <div class="spinner" style="border: 3px solid rgba(0,0,0,0.1); border-top: 3px solid var(--accent-color); border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; display: inline-block;"></div>
                         <p style="font-size: 12px; margin-top: 8px;">Processando dados...</p>
+                        <div id="statusLog" style="text-align: left; max-height: 120px; overflow-y: auto; margin-top: 12px; padding: 10px; background: rgba(0,0,0,0.05); border-radius: 6px; font-family: 'Courier New', monospace; font-size: 11px; color: #444; border: 1px solid rgba(0,0,0,0.1);"></div>
                         <style>@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }</style>
                     </div>
 
@@ -476,18 +477,32 @@ class SuiteApp {
 
             if (processBtn) {
                 processBtn.addEventListener('click', async () => {
-                    const instanceName = moduleId.replace('process-', 'process'); // Ex: process-a -> processA
+                    // Converte ID (process-a) para Instância (processA) de forma robusta
+                    const instanceName = moduleId.split('-').map((w, i) => i === 0 ? w : w.charAt(0).toUpperCase() + w.slice(1)).join('');
                     const engine = window[instanceName];
+                    const files = Array.from(fileInput.files);
+                    const statusLog = document.getElementById('statusLog');
 
-                    if (engine && fileInput.files.length >= 2) {
+                    const updateStatus = (msg) => {
+                        if (!statusLog) return;
+                        const line = document.createElement('div');
+                        line.style.borderBottom = "1px solid rgba(0,0,0,0.05)";
+                        line.style.padding = "2px 0";
+                        line.textContent = `> ${msg}`;
+                        statusLog.appendChild(line);
+                        statusLog.scrollTop = statusLog.scrollHeight;
+                    };
+
+                    if (engine && files.length >= 2) {
                         processBtn.disabled = true;
                         processBtn.style.opacity = '0.5';
                         document.getElementById('loadingIndicator').style.display = 'block';
                         document.getElementById('processResult').style.display = 'none';
                         document.getElementById('alertPanel').style.display = 'none';
+                        if (statusLog) statusLog.innerHTML = '<b>Iniciando Log de Processamento...</b><br>';
 
                         try {
-                            const result = await engine.process(Array.from(fileInput.files));
+                            const result = await engine.process(files, updateStatus);
                             document.getElementById('loadingIndicator').style.display = 'none';
                             document.getElementById('processResult').style.display = 'block';
                             document.getElementById('resultMessage').textContent = result.message;
@@ -525,10 +540,10 @@ class SuiteApp {
 
         const handleFiles = (files) => {
             if (files.length > 0) {
-                const file = files[0];
-                fileNameDisplay.textContent = `${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
+                const names = Array.from(files).map(f => `• ${f.name} (${(f.size / 1024).toFixed(1)} KB)`).join('<br>');
+                fileNameDisplay.innerHTML = names;
                 fileInfo.style.display = 'block';
-                processBtn.disabled = false;
+                processBtn.disabled = files.length < 2;
                 processBtn.style.opacity = '1';
                 dropZone.querySelector('.drop-zone-icon').textContent = '📄';
             }
@@ -596,7 +611,7 @@ class SuiteApp {
                 </div>
 
                 <div style="margin-top: var(--spacing-2xl); padding-top: var(--spacing-lg); border-top: 1px solid var(--border-color); text-align: center; opacity: 0.6; font-size: 12px;">
-                    Versão SIDC_v1.0.0 • 2026 • Suite SIDC • Todos os direitos reservados
+                    Versão SIDC_v1.1.1-beta • 2026 • Suite SIDC • Todos os direitos reservados
                 </div>
             </div>
         `;

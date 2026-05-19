@@ -1,7 +1,7 @@
 ﻿﻿﻿﻿# Suite System Intelligence - Desenvolvimento de Canais
 
 ## 📋 Visão Geral
-**Versão SIDC_v1.1.0 (Beta - Motor de Automação "O Piloto")**  
+**Versão SIDC_v1.1.1-beta (Motor de Automação "O Piloto")**  
 A Suite SIDC é um ecossistema modular de alta performance para processamento e análise de dados, projetada com foco em UX Premium (Apple Design) e automação assistida para o time de Desenvolvimento de Canais.
 
 ---
@@ -12,11 +12,11 @@ Este projeto agora funciona como um PWA instalável pelo navegador.
 
 **Link público:** https://github.com/edgarsgs/SIDC
 
-**Versão estável:** https://github.com/edgarsgs/SIDC/releases/tag/SIDC_v1.1.0
+**Versão estável:** https://github.com/edgarsgs/SIDC/releases/tag/SIDC_v1.1.1-beta
 
 Leia também: [Guia de instalação do PWA](INSTALL_GUIDE.md)
 
-### 🚀 Novidades da Versão 1.1.0 (Beta)
+### 🚀 Novidades da Versão 1.1.1-beta
 - **Módulo "O Piloto" Operacional**: Implementação completa das regras de saneamento e filtragem de Armazenagem.
 - **Integração SheetJS**: Capacidade de ler e manipular arquivos `.xlsx` nativamente no browser.
 - **Motor de Cruzamento (Join)**: Lógica de PROCX baseada na raiz do CNPJ (7 dígitos) entre Armazenagem e FP98.
