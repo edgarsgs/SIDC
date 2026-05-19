@@ -1,7 +1,7 @@
-﻿﻿﻿﻿# Suite System Intelligence - Desenvolvimento de Canais
+﻿﻿﻿﻿﻿﻿# Suite System Intelligence - Desenvolvimento de Canais
 
 ## 📋 Visão Geral
-**Versão SIDC_v1.1.6-beta (Motor de Automação "O Piloto" - Estável)**  
+**Versão SIDC_v1.1.7-beta (Motor de Automação "O Piloto" - Estável)**  
 A Suite SIDC é um ecossistema modular de alta performance para processamento e análise de dados, projetada com foco em UX Premium (Apple Design) e automação assistida para o time de Desenvolvimento de Canais.
 
 ---
@@ -12,7 +12,11 @@ Este projeto agora funciona como um PWA instalável pelo navegador.
 
 **Link público:** https://github.com/edgarsgs/SIDC
 
-**Versão estável:** https://github.com/edgarsgs/SIDC/releases/tag/SIDC_v1.1.6-beta
+**Versão estável:** https://github.com/edgarsgs/SIDC/releases/tag/SIDC_v1.1.7-beta
+### 🚀 Novidades da Versão 1.1.7-beta
+- **Normalização Robusta (Regra 05)**: O sistema agora ignora aspas, acentos e pontuações na identificação do cabeçalho de Armazenagem.
+- **Resiliência de Dados**: Busca por valores próximos e insensibilidade a maiúsculas/minúsculas.
+
 ### 🚀 Novidades da Versão 1.1.6-beta
 - **Dashboard de Resultados**: Visualização imediata dos indicadores agregados após o processamento.
 - **Estabilidade de Download**: Correção no fluxo de exportação para garantir a geração do arquivo XLSX.

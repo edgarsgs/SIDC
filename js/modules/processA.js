@@ -1,11 +1,11 @@
 /**
  * Módulo Processo A: Base de Automáticos - O Piloto
- * Versão: 1.1.6-beta
+ * Versão: 1.1.7-beta
  */
 class ProcessA {
     constructor() {
         this.name = 'Base de Automáticos - O Piloto';
-        this.version = '1.1.6-beta';
+        this.version = '1.1.7-beta';
         this.processedWorkbook = null;
     }
 
@@ -118,11 +118,23 @@ class ProcessA {
     }
 
     identifyHeaderAndClean(json) {
-        const target = ["sigla filial", "cod. filial", "tipo", "nr. conhecimento"];
+        // Função auxiliar para normalização robusta
+        const normalize = (str) => {
+            if (!str) return "";
+            return String(str)
+                .toLowerCase()
+                .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // Remove acentos (Cód -> cod)
+                .replace(/["']/g, "") // Remove aspas (") e (')
+                .replace(/[.ºª]/g, "") // Remove pontos e símbolos de ordinal/número
+                .trim();
+        };
+
+        // Targets normalizados (sem pontos ou acentos)
+        const target = ["sigla filial", "cod filial", "tipo", "nr conhecimento"];
         let headerRowIndex = -1;
 
         for (let i = 0; i < Math.min(json.length, 30); i++) {
-            const values = Object.values(json[i]).map(v => String(v).toLowerCase());
+            const values = Object.values(json[i]).map(v => normalize(v));
             if (target.every(t => values.includes(t))) {
                 headerRowIndex = i;
                 break;
