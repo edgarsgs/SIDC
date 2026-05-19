@@ -5,8 +5,8 @@ class SuiteApp {
         this.currentModule = null;
         this.modules = {
             'process-a': {
-                name: 'Processo A',
-                description: 'Análise de dados estruturados',
+                name: 'Base de Automáticos - O Piloto',
+                description: 'Processamento de Armazenagem vs FP98',
                 jsFile: 'js/modules/processA.js'
             },
             'process-b': {
@@ -389,31 +389,61 @@ class SuiteApp {
     }
 
     loadModule(moduleId, module) {
-        // This will be where you load the actual module JS file
-        // For now, we'll show a placeholder
-        
+        // Carrega bibliotecas externas necessárias (SheetJS)
+        if (!window.XLSX) {
+            const xlsxScript = document.createElement('script');
+            xlsxScript.src = 'https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js';
+            document.head.appendChild(xlsxScript);
+        }
+
+        // Carrega o script do módulo
+        if (!window[moduleId.replace('-', '')] && module.jsFile) {
+            const script = document.createElement('script');
+            script.src = module.jsFile;
+            document.head.appendChild(script);
+        }
+
         setTimeout(() => {
             this.modal.body.innerHTML = `
                 <div class="upload-container">
                     <div>
                         <h3 style="margin-bottom: 8px;">${module.name}</h3>
-                        <p style="opacity: 0.7; font-size: 14px;">${module.description}</p>
+                        <p style="opacity: 0.7; font-size: 14px; margin-bottom: 20px;">${module.description}</p>
                     </div>
                     
                     <div class="drop-zone" id="dropZone">
                         <div class="drop-zone-icon">📁</div>
                         <div class="drop-zone-content">
-                            <p class="drop-zone-text">Arraste seu arquivo para aqui ou clique para selecionar</p>
-                            <p class="drop-zone-hint">Formatos aceitos: Excel (.xlsx, .xls), CSV ou JSON</p>
+                            <p class="drop-zone-text">Arraste as 2 planilhas (Armazenagem e FP98) ou clique para selecionar</p>
+                            <p class="drop-zone-hint">Formatos aceitos: .xlsx, .xls</p>
                         </div>
-                        <input type="file" id="fileUpload" class="file-input-hidden" accept=".xlsx,.xls,.csv,.json">
+                        <input type="file" id="fileUpload" class="file-input-hidden" accept=".xlsx,.xls" multiple>
                     </div>
 
-                    <div id="fileInfo" style="display: none; padding: 12px; background: var(--accent-light); border-radius: 8px; border-left: 4px solid var(--accent-color);">
+                    <div id="fileInfo" style="display: none; padding: 12px; background: var(--accent-light); border-radius: 8px; border-left: 4px solid var(--accent-color); margin-top: 16px;">
                         <p style="font-size: 14px; font-weight: 600; color: var(--accent-color);">Arquivo selecionado:</p>
                         <p id="fileName" style="font-size: 14px;"></p>
                     </div>
 
+                    <div id="processResult" style="display: none; margin-top: 16px; padding: 12px; border-radius: 8px; background: #e8f5e9; border: 1px solid #c8e6c9;">
+                        <p style="font-size: 14px; color: #2e7d32; font-weight: 600;">✅ Resultado:</p>
+                        <p id="resultMessage" style="font-size: 13px;"></p>
+                        <div id="summaryStats" style="margin-top: 10px; font-size: 12px; color: #333;"></div>
+                        <button id="downloadReportBtn" class="module-btn" style="margin-top: 15px; background: #2e7d32; padding: 8px;">Baixar Relatório Mastigado</button>
+                    </div>
+
+                    <div id="alertPanel" style="display: none; margin-top: 12px; padding: 12px; border-radius: 8px; background: #fff3e0; border: 1px solid #ffe0b2;">
+                        <p style="font-size: 14px; color: #e65100; font-weight: 600;">⚠️ Atenção (Média > 3k):</p>
+                        <div id="alertContent" style="font-size: 12px; max-height: 100px; overflow-y: auto;"></div>
+                    </div>
+
+                    <div id="loadingIndicator" style="display: none; text-align: center; margin-top: 16px;">
+                        <div class="spinner" style="border: 3px solid rgba(0,0,0,0.1); border-top: 3px solid var(--accent-color); border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; display: inline-block;"></div>
+                        <p style="font-size: 12px; margin-top: 8px;">Processando dados...</p>
+                        <style>@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }</style>
+                    </div>
+
+                    <div style="margin-top: 20px;">
                     <p style="margin-bottom: 16px; opacity: 0.7;">${module.description}</p>
                     
                     <button 
@@ -435,17 +465,49 @@ class SuiteApp {
                     >
                         Processar Arquivo
                     </button>
+                    </div>
                 </div>
             `;
 
             this.setupDragAndDrop();
 
             const processBtn = this.modal.body.querySelector('#processModuleBtn');
+            const fileInput = this.modal.body.querySelector('#fileUpload');
+
             if (processBtn) {
-                processBtn.addEventListener('click', () => {
-                    if (this.isDebug) {
-                        this.showToast(`Modo Debug: Processando dados fictícios para ${module.name}...`);
-                        console.log('Dados do arquivo capturados:', document.getElementById('fileName').textContent);
+                processBtn.addEventListener('click', async () => {
+                    const instanceName = moduleId.replace('process-', 'process'); // Ex: process-a -> processA
+                    const engine = window[instanceName];
+
+                    if (engine && fileInput.files.length >= 2) {
+                        processBtn.disabled = true;
+                        processBtn.style.opacity = '0.5';
+                        document.getElementById('loadingIndicator').style.display = 'block';
+                        document.getElementById('processResult').style.display = 'none';
+                        document.getElementById('alertPanel').style.display = 'none';
+
+                        try {
+                            const result = await engine.process(Array.from(fileInput.files));
+                            document.getElementById('loadingIndicator').style.display = 'none';
+                            document.getElementById('processResult').style.display = 'block';
+                            document.getElementById('resultMessage').textContent = result.message;
+                            
+                            // Exibir alertas de 3k se houver
+                            if (result.alerts && result.alerts.length > 0) {
+                                document.getElementById('alertPanel').style.display = 'block';
+                                document.getElementById('alertContent').innerHTML = result.alerts.join('<br>');
+                            }
+
+                            this.modal.body.querySelector('#downloadReportBtn').onclick = () => engine.download();
+
+                            this.showToast('Processamento concluído!');
+                        } catch (error) {
+                            document.getElementById('loadingIndicator').style.display = 'none';
+                            this.showToast('Erro no processamento.');
+                            alert(error);
+                        }
+                        processBtn.disabled = false;
+                        processBtn.style.opacity = '1';
                     } else {
                         alert(`Módulo ${module.name} será implementado em breve com seu arquivo JS específico`);
                     }
