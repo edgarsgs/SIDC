@@ -490,7 +490,6 @@ class SuiteApp {
             this.setupDragAndDrop();
 
             const processBtn = this.modal.body.querySelector('#processModuleBtn');
-            const fileInput = this.modal.body.querySelector('#fileUpload');
 
             if (processBtn) {
                 processBtn.addEventListener('click', async () => {
@@ -667,7 +666,7 @@ class SuiteApp {
                 </div>
 
                 <div style="margin-top: var(--spacing-2xl); padding-top: var(--spacing-lg); border-top: 1px solid var(--border-color); text-align: center; opacity: 0.6; font-size: 12px;">
-                    Versão SIDC_v1.1.5-beta • 2026 • Suite SIDC • Todos os direitos reservados
+                    Versão SIDC_v1.1.6-beta • 2026 • Suite SIDC • Todos os direitos reservados
                 </div>
             </div>
         `;
