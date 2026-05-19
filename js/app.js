@@ -408,34 +408,46 @@ class SuiteApp {
         setTimeout(() => {
             this.modal.body.innerHTML = `
                 <div class="upload-container">
-                    <div>
+                    <div style="margin-bottom: 20px;">
                         <h3 style="margin-bottom: 8px;">${module.name}</h3>
-                        <p style="opacity: 0.7; font-size: 14px; margin-bottom: 20px;">${module.description}</p>
+                        <p style="opacity: 0.7; font-size: 14px;">${module.description}</p>
                     </div>
                     
-                    <div class="drop-zone" id="dropZone">
-                        <div class="drop-zone-icon">📁</div>
-                        <div class="drop-zone-content">
-                            <p class="drop-zone-text">Arraste as 2 planilhas (Armazenagem e FP98) ou clique para selecionar</p>
-                            <p class="drop-zone-hint">Formatos aceitos: .xlsx, .xls</p>
+                    <!-- Campo 1: Armazenagem -->
+                    <div class="drop-group" style="margin-bottom: 16px;">
+                        <label style="display: block; font-size: 12px; font-weight: 600; margin-bottom: 4px; opacity: 0.8;">1. PLANILHA ARMAZENAGEM</label>
+                        <div class="drop-zone" id="dropZoneArm" style="padding: 20px;">
+                            <div class="drop-zone-content">
+                                <p class="drop-zone-text" id="textArm">Arraste a planilha ou clique</p>
+                            </div>
+                            <input type="file" id="fileArm" class="file-input-hidden" accept=".xlsx,.xls">
                         </div>
-                        <input type="file" id="fileUpload" class="file-input-hidden" accept=".xlsx,.xls" multiple>
                     </div>
 
-                    <div id="fileInfo" style="display: none; padding: 12px; background: var(--accent-light); border-radius: 8px; border-left: 4px solid var(--accent-color); margin-top: 16px;">
-                        <p style="font-size: 14px; font-weight: 600; color: var(--accent-color);">Arquivo selecionado:</p>
-                        <p id="fileName" style="font-size: 14px;"></p>
+                    <!-- Campo 2: FP98 -->
+                    <div class="drop-group" style="margin-bottom: 20px;">
+                        <label style="display: block; font-size: 12px; font-weight: 600; margin-bottom: 4px; opacity: 0.8;">2. PLANILHA FP98</label>
+                        <div class="drop-zone" id="dropZoneFP" style="padding: 20px;">
+                            <div class="drop-zone-content">
+                                <p class="drop-zone-text" id="textFP">Arraste a planilha ou clique</p>
+                            </div>
+                            <input type="file" id="fileFP" class="file-input-hidden" accept=".xlsx,.xls">
+                        </div>
                     </div>
+
+                    <style>
+                        .drop-zone.file-ok { border-color: var(--success-color); background: rgba(52, 199, 89, 0.05); }
+                        .drop-zone.file-ok .drop-zone-text { color: var(--success-color); font-weight: 600; }
+                    </style>
 
                     <div id="processResult" style="display: none; margin-top: 16px; padding: 12px; border-radius: 8px; background: #e8f5e9; border: 1px solid #c8e6c9;">
                         <p style="font-size: 14px; color: #2e7d32; font-weight: 600;">✅ Resultado:</p>
                         <p id="resultMessage" style="font-size: 13px;"></p>
-                        <div id="summaryStats" style="margin-top: 10px; font-size: 12px; color: #333;"></div>
                         <button id="downloadReportBtn" class="module-btn" style="margin-top: 15px; background: #2e7d32; padding: 8px;">Baixar Relatório Mastigado</button>
                     </div>
 
                     <div id="alertPanel" style="display: none; margin-top: 12px; padding: 12px; border-radius: 8px; background: #fff3e0; border: 1px solid #ffe0b2;">
-                        <p style="font-size: 14px; color: #e65100; font-weight: 600;">⚠️ Atenção (Média > 3k):</p>
+                        <p style="font-size: 14px; color: #e65100; font-weight: 600;">⚠️ Alerta de Médias (> R$ 3.000):</p>
                         <div id="alertContent" style="font-size: 12px; max-height: 100px; overflow-y: auto;"></div>
                     </div>
 
@@ -446,9 +458,7 @@ class SuiteApp {
                         <style>@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }</style>
                     </div>
 
-                    <div style="margin-top: 20px;">
-                    <p style="margin-bottom: 16px; opacity: 0.7;">${module.description}</p>
-                    
+                    <div style="margin-top: 10px;">
                     <button 
                         id="processModuleBtn"
                         disabled
@@ -480,11 +490,13 @@ class SuiteApp {
             if (processBtn) {
                 processBtn.addEventListener('click', async () => {
                     // Converte ID (process-a) para Instância (processA) de forma robusta
-                    const instanceName = moduleId.split('-').map((w, i) => i === 0 ? w : w.charAt(0).toUpperCase() + w.slice(1)).join('');
+                    const instanceName = moduleId.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
                     const engine = window[instanceName];
-                    const files = Array.from(fileInput.files);
+                    
+                    const fileArm = this.modal.body.querySelector('#fileArm').files[0];
+                    const fileFP = this.modal.body.querySelector('#fileFP').files[0];
                     const statusLog = document.getElementById('statusLog');
-
+                    
                     const updateStatus = (msg) => {
                         if (!statusLog) return;
                         const line = document.createElement('div');
@@ -495,7 +507,7 @@ class SuiteApp {
                         statusLog.scrollTop = statusLog.scrollHeight;
                     };
 
-                    if (engine && files.length > 0) {
+                    if (engine && fileArm && fileFP) {
                         processBtn.disabled = true;
                         processBtn.style.opacity = '0.5';
                         document.getElementById('loadingIndicator').style.display = 'block';
@@ -504,7 +516,7 @@ class SuiteApp {
                         if (statusLog) statusLog.innerHTML = '<b>Iniciando Log de Processamento...</b><br>';
 
                         try {
-                            const result = await engine.process(files, updateStatus);
+                            const result = await engine.process(fileArm, fileFP, updateStatus);
                             document.getElementById('loadingIndicator').style.display = 'none';
                             document.getElementById('processResult').style.display = 'block';
                             document.getElementById('resultMessage').textContent = result.message;
@@ -540,51 +552,47 @@ class SuiteApp {
     }
 
     setupDragAndDrop() {
-        const dropZone = document.getElementById('dropZone');
-        const fileInput = document.getElementById('fileUpload');
+        const zones = [
+            { zone: 'dropZoneArm', input: 'fileArm', text: 'textArm' },
+            { zone: 'dropZoneFP', input: 'fileFP', text: 'textFP' }
+        ];
+
         const processBtn = document.getElementById('processModuleBtn');
-        const fileInfo = document.getElementById('fileInfo');
-        const fileNameDisplay = document.getElementById('fileName');
 
-        const handleFiles = (files) => {
-            if (files.length > 0) {
-                const names = Array.from(files).map(f => `• ${f.name} (${(f.size / 1024).toFixed(1)} KB)`).join('<br>');
-                fileNameDisplay.innerHTML = names;
-                fileInfo.style.display = 'block';
-                processBtn.disabled = files.length < 2;
-                processBtn.style.opacity = '1';
-                dropZone.querySelector('.drop-zone-icon').textContent = '📄';
-            }
-        };
+        zones.forEach(cfg => {
+            const zoneElem = document.getElementById(cfg.zone);
+            const inputElem = document.getElementById(cfg.input);
+            const textElem = document.getElementById(cfg.text);
 
-        dropZone.addEventListener('click', () => fileInput.click());
+            const updateZone = (file) => {
+                if (file) {
+                    zoneElem.classList.add('file-ok');
+                    textElem.textContent = `✅ ${file.name}`;
+                    
+                    const fileArm = document.getElementById('fileArm').files[0];
+                    const fileFP = document.getElementById('fileFP').files[0];
+                    if (fileArm && fileFP) {
+                        processBtn.disabled = false;
+                        processBtn.style.opacity = '1';
+                    }
+                }
+            };
 
-        fileInput.addEventListener('change', (e) => handleFiles(e.target.files));
+            zoneElem.addEventListener('click', () => inputElem.click());
+            inputElem.addEventListener('change', (e) => updateZone(e.target.files[0]));
 
-        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-            dropZone.addEventListener(eventName, (e) => {
+            zoneElem.addEventListener('dragover', (e) => {
                 e.preventDefault();
-                e.stopPropagation();
-            }, false);
+                zoneElem.classList.add('drag-over');
+            });
+            zoneElem.addEventListener('dragleave', () => zoneElem.classList.remove('drag-over'));
+            zoneElem.addEventListener('drop', (e) => {
+                e.preventDefault();
+                zoneElem.classList.remove('drag-over');
+                inputElem.files = e.dataTransfer.files;
+                updateZone(inputElem.files[0]);
+            });
         });
-
-        ['dragenter', 'dragover'].forEach(eventName => {
-            dropZone.addEventListener(eventName, () => {
-                dropZone.classList.add('drag-over');
-            }, false);
-        });
-
-        ['dragleave', 'drop'].forEach(eventName => {
-            dropZone.addEventListener(eventName, () => {
-                dropZone.classList.remove('drag-over');
-            }, false);
-        });
-
-        dropZone.addEventListener('drop', (e) => {
-            const dt = e.dataTransfer;
-            const files = dt.files;
-            handleFiles(files);
-        }, false);
     }
 
     openAboutModal() {
@@ -619,7 +627,7 @@ class SuiteApp {
                 </div>
 
                 <div style="margin-top: var(--spacing-2xl); padding-top: var(--spacing-lg); border-top: 1px solid var(--border-color); text-align: center; opacity: 0.6; font-size: 12px;">
-                    Versão SIDC_v1.1.3-beta • 2026 • Suite SIDC • Todos os direitos reservados
+                    Versão SIDC_v1.1.4-beta • 2026 • Suite SIDC • Todos os direitos reservados
                 </div>
             </div>
         `;
