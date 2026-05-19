@@ -397,9 +397,11 @@ class SuiteApp {
         }
 
         // Carrega o script do módulo
-        if (!window[moduleId.replace('-', '')] && module.jsFile) {
+        const instanceName = moduleId.split('-').map((w, i) => i === 0 ? w : w.charAt(0).toUpperCase() + w.slice(1)).join('');
+        if (!window[instanceName] && module.jsFile) {
             const script = document.createElement('script');
             script.src = module.jsFile;
+            script.onload = () => console.log(`[System] Módulo ${instanceName} carregado.`);
             document.head.appendChild(script);
         }
 
@@ -493,7 +495,7 @@ class SuiteApp {
                         statusLog.scrollTop = statusLog.scrollHeight;
                     };
 
-                    if (engine && files.length >= 2) {
+                    if (engine && files.length > 0) {
                         processBtn.disabled = true;
                         processBtn.style.opacity = '0.5';
                         document.getElementById('loadingIndicator').style.display = 'block';
@@ -513,7 +515,13 @@ class SuiteApp {
                                 document.getElementById('alertContent').innerHTML = result.alerts.join('<br>');
                             }
 
-                            this.modal.body.querySelector('#downloadReportBtn').onclick = () => engine.download();
+                            const downloadBtn = this.modal.body.querySelector('#downloadReportBtn');
+                            if (downloadBtn) {
+                                downloadBtn.onclick = () => {
+                                    this.showToast('Iniciando download...');
+                                    engine.download();
+                                };
+                            }
 
                             this.showToast('Processamento concluído!');
                         } catch (error) {
@@ -611,7 +619,7 @@ class SuiteApp {
                 </div>
 
                 <div style="margin-top: var(--spacing-2xl); padding-top: var(--spacing-lg); border-top: 1px solid var(--border-color); text-align: center; opacity: 0.6; font-size: 12px;">
-                    Versão SIDC_v1.1.1-beta • 2026 • Suite SIDC • Todos os direitos reservados
+                    Versão SIDC_v1.1.3-beta • 2026 • Suite SIDC • Todos os direitos reservados
                 </div>
             </div>
         `;
